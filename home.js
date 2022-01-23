@@ -79,9 +79,9 @@ const app = {
     },
 
     render: function () {
-        const htmlSongs = this.songs.map(song => {
+        const htmlSongs = this.songs.map((song, index) => {
             return `
-            <div class="song">
+            <div class="song ${index === this.currentIndexSong ? 'active' : ''}">
                 <div class="thumb"
                     style="background-image: url('${song.image}')">
                 </div>
@@ -164,6 +164,8 @@ const app = {
                 _this.nextSong();
             }
             audio.play();
+            _this.render();
+            _this.scrolltoActiveSong();
         }
 
         // Khi prev Song
@@ -174,6 +176,8 @@ const app = {
                 _this.prevSong();
             }
             audio.play();
+            _this.render();
+            _this.scrolltoActiveSong();
         }
 
         // Khi bật / tắt Random Song
@@ -195,6 +199,8 @@ const app = {
             } else {
                 _this.nextSong();
                 audio.play();
+                _this.render();
+                _this.scrolltoActiveSong();
             }
         }
     },
@@ -228,6 +234,15 @@ const app = {
         } while (newRandomIndex === this.currentIndexSong);
         this.currentIndexSong = newRandomIndex;
         this.loadCurrentSong();
+    },
+
+    scrolltoActiveSong: function () {
+        setTimeout(function () {
+            $('.song.active').scrollIntoView({
+                behavior: 'smooth',
+                block: 'end'
+            })
+        }, 300)
     },
 
     start: function() {
