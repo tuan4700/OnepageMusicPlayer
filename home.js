@@ -10,10 +10,14 @@ const player = $('.player');
 const seek = $('.progress');
 const btnNextSong = $('.btn-next');
 const btnPrevSong = $('.btn-prev');
+const btnRandomSong = $('.btn-random');
+const btnRepeatSong = $('.btn-repeat');
 
 const app = {
     currentIndexSong: 0,
     isPlaySong: false,
+    isRandomSong: false,
+    isRepeatSong: false,
 
     songs: [
         {
@@ -154,16 +158,45 @@ const app = {
 
         // Khi next Song
         btnNextSong.onclick = function () {
-            _this.nextSong();
+            if(_this.isRandomSong) {
+                _this.randomSong();
+            } else {
+                _this.nextSong();
+            }
             audio.play();
         }
 
         // Khi prev Song
         btnPrevSong.onclick = function () {
-            _this.prevSong();
+            if(_this.isRandomSong) {
+                _this.randomSong();
+            } else {
+                _this.prevSong();
+            }
             audio.play();
         }
 
+        // Khi bật / tắt Random Song
+        btnRandomSong.onclick = function () {
+            _this.isRandomSong = !_this.isRandomSong;
+            btnRandomSong.classList.toggle('active', _this.isRandomSong);
+        }
+
+        // Khi bật / tắt Repeat Song
+        btnRepeatSong.onclick = function () {
+            _this.isRepeatSong = !_this.isRepeatSong;
+            btnRepeatSong.classList.toggle('active', _this.isRepeatSong);
+        }
+        
+        // Repeat / Next Song khi ended
+        audio.onended = function () {
+            if(_this.isRepeatSong) {
+                audio.play();
+            } else {
+                _this.nextSong();
+                audio.play();
+            }
+        }
     },
 
     loadCurrentSong: function () {
@@ -185,6 +218,15 @@ const app = {
         if(this.currentIndexSong < 0) {
             this.currentIndexSong = this.songs.length - 1;
         }
+        this.loadCurrentSong();
+    },
+
+    randomSong: function () {
+        let newRandomIndex;
+        do {
+            newRandomIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newRandomIndex === this.currentIndexSong);
+        this.currentIndexSong = newRandomIndex;
         this.loadCurrentSong();
     },
 
