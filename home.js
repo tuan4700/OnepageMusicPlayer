@@ -242,7 +242,7 @@ const app = {
                 behavior: 'smooth',
                 block: 'end'
             })
-        }, 300)
+        }, 400)
     },
 
     start: function() {
