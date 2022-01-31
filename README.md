@@ -1,5 +1,5 @@
 # OnepageMusicPlayer
-- Web nghe nhạc
+## Functions:
 - Render songs
 - Scroll top
 - Play/ Pause/ Seek
